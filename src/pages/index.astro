@@ -1,6 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
+
+// Events are loaded live in the browser from /api/events (a Netlify function
+// that reads Luma's iCal feed), so they're always current with no rebuilds.
+const CAL_URL = "https://luma.com/boulder-tech-connect";
 ---
 
 <Layout>
@@ -9,7 +13,6 @@ import "../styles/global.css";
     <p class="tagline">boulder's casual tech meetup</p>
     <nav>
       <ul>
-        <li><a href="#events">Events</a></li>
         <li><a href="#gallery">Photos</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#connect">Connect</a></li>
@@ -19,19 +22,132 @@ import "../styles/global.css";
 
   <main>
     <section id="events" class="events">
-      <div class="luma-embed">
-        <iframe
-          src="https://luma.com/embed/calendar/cal-uiQtr7zdMvN8Dr5/events"
-          width="600"
-          height="900"
-          frameborder="0"
-          scrolling="no"
-          allowfullscreen=""
-          aria-hidden="false"
-          tabindex="0"
-          title="Boulder Tech Connect events on Luma"></iframe>
-      </div>
+      <h2>Upcoming Events</h2>
+      <ul class="event-list" id="event-list" aria-live="polite" aria-busy="true">
+        <li class="events-status">Loading events…</li>
+      </ul>
+      <noscript>
+        <p class="events-status">
+          <a href={CAL_URL} target="_blank" rel="noopener">
+            View upcoming events on Luma →
+          </a>
+        </p>
+      </noscript>
+      <p class="events-cta">
+        <a class="btn" href={CAL_URL} target="_blank" rel="noopener">
+          See all events on Luma
+        </a>
+      </p>
     </section>
+
+    <script>
+      const CAL_URL = "https://luma.com/boulder-tech-connect";
+      const TZ = "America/Denver";
+      const fmt = (d: Date, opts: Intl.DateTimeFormatOptions) =>
+        new Intl.DateTimeFormat("en-US", { timeZone: TZ, ...opts }).format(d);
+
+      type ApiEvent = {
+        title: string;
+        start: string;
+        end: string | null;
+        location: string;
+        url: string | null;
+      };
+
+      function renderCard(ev: ApiEvent): HTMLLIElement {
+        const start = new Date(ev.start);
+        const li = document.createElement("li");
+        li.className = "event-card";
+
+        const date = document.createElement("div");
+        date.className = "event-date";
+        date.setAttribute("aria-hidden", "true");
+        const month = document.createElement("span");
+        month.className = "event-month";
+        month.textContent = fmt(start, { month: "short" });
+        const day = document.createElement("span");
+        day.className = "event-day";
+        day.textContent = fmt(start, { day: "numeric" });
+        date.append(month, day);
+
+        const body = document.createElement("div");
+        body.className = "event-body";
+
+        const title = document.createElement("h3");
+        title.className = "event-title";
+        const link = document.createElement("a");
+        link.href = ev.url || CAL_URL;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = ev.title;
+        title.append(link);
+
+        const meta = document.createElement("p");
+        meta.className = "event-meta";
+        const time = document.createElement("time");
+        time.dateTime = ev.start;
+        time.textContent = `${fmt(start, { weekday: "long" })} · ${fmt(start, {
+          hour: "numeric",
+          minute: "2-digit",
+          timeZoneName: "short",
+        })}`;
+        meta.append(time);
+
+        body.append(title, meta);
+
+        if (ev.location) {
+          const loc = document.createElement("p");
+          loc.className = "event-location";
+          loc.textContent = ev.location;
+          body.append(loc);
+        }
+
+        li.append(date, body);
+        return li;
+      }
+
+      function statusMessage(text: string, linkText: string): HTMLLIElement {
+        const li = document.createElement("li");
+        li.className = "events-status";
+        li.append(document.createTextNode(text + " "));
+        const a = document.createElement("a");
+        a.href = CAL_URL;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = linkText;
+        li.append(a);
+        return li;
+      }
+
+      async function loadEvents() {
+        const list = document.getElementById("event-list");
+        if (!list) return;
+        try {
+          const res = await fetch("/api/events");
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const { events } = (await res.json()) as { events: ApiEvent[] };
+          list.replaceChildren();
+          if (!events || events.length === 0) {
+            list.append(
+              statusMessage(
+                "No upcoming events are posted right now.",
+                "Check the Luma calendar →",
+              ),
+            );
+          } else {
+            for (const ev of events) list.append(renderCard(ev));
+          }
+        } catch (err) {
+          list.replaceChildren(
+            statusMessage("Couldn’t load events right now.", "View them on Luma →"),
+          );
+        } finally {
+          list.setAttribute("aria-busy", "false");
+        }
+      }
+
+      loadEvents();
+    </script>
 
     <section id="gallery" class="gallery">
       <h2>Share your photos!</h2>
