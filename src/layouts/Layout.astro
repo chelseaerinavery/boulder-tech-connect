@@ -28,6 +28,10 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Preload the full-screen background (the LCP element) so it paints sooner -->
+    <link rel="preload" as="image" href="/bg-mobile.png" media="(max-width: 767px)" />
+    <link rel="preload" as="image" href="/bg-desktop.png" media="(min-width: 768px)" />
+
     <!-- Primary SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />

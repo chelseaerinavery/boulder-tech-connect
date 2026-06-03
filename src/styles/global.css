@@ -8,7 +8,7 @@
   --lav: #c1bdf4;
   --ink: #17142a;
   --muted: #4f4a68;
-  --accent: #6c63ff;
+  --accent: #5a4fd0;
   --card: rgba(255, 255, 255, 0.92);
   --border: #141019;
   --shadow: 6px 6px 0 rgba(20, 16, 25, 0.18);
@@ -202,6 +202,16 @@ h2 {
   gap: 1rem;
   margin-top: 1.25rem;
   text-align: left;
+  /* Reserve roughly three cards' worth of height so swapping the "Loading…"
+     placeholder for the fetched events doesn't shift the page (fixes CLS). */
+  min-height: 320px;
+}
+
+/* Center the loading/empty/error message within the reserved space */
+.event-list:has(.events-status) {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .event-card {
@@ -213,6 +223,21 @@ h2 {
   border-radius: 16px;
   padding: 1rem 1.25rem;
   box-shadow: var(--shadow);
+}
+
+/* Today's event gets a highlighted card + the "TODAY" badge on the right */
+.event-card.is-today {
+  border-color: var(--accent);
+  box-shadow: 6px 6px 0 rgba(90, 79, 208, 0.3);
+}
+
+.event-today {
+  flex: 0 0 auto;
+  width: 96px;
+  height: auto;
+  margin-left: auto;
+  align-self: center;
+  transform: rotate(-9deg);
 }
 
 .event-date {

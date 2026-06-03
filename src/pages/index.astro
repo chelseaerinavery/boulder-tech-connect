@@ -46,6 +46,15 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
       const fmt = (d: Date, opts: Intl.DateTimeFormatOptions) =>
         new Intl.DateTimeFormat("en-US", { timeZone: TZ, ...opts }).format(d);
 
+      // YYYY-MM-DD in Boulder's timezone, for comparing calendar days
+      const dayKey = (d: Date) =>
+        new Intl.DateTimeFormat("en-CA", {
+          timeZone: TZ,
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(d);
+
       type ApiEvent = {
         title: string;
         start: string;
@@ -103,6 +112,19 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
         }
 
         li.append(date, body);
+
+        // If the event happens today (Boulder time), flag the card and add the badge
+        if (dayKey(start) === dayKey(new Date())) {
+          li.classList.add("is-today");
+          const badge = document.createElement("img");
+          badge.className = "event-today";
+          badge.src = "/today.png";
+          badge.alt = "Happening today";
+          badge.width = 96;
+          badge.height = 96;
+          li.append(badge);
+        }
+
         return li;
       }
 
