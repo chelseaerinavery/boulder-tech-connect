@@ -1,0 +1,75 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  /** Path to a social share image in /public, e.g. "/og-image.png" (1200x630). */
+  ogImage?: string;
+}
+
+const {
+  title = "Boulder Tech Connect — Boulder's monthly tech meetup",
+  description = "A casual monthly networking meetup for Boulder's tech community. Developers, designers, and founders gather the first Wednesday of every month at Rayback Collective.",
+  ogImage,
+} = Astro.props;
+
+// Canonical + absolute OG URL derived from `site` in astro.config.mjs
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#c1bdf4" />
+
+    <!-- Open Graph (Facebook, LinkedIn, iMessage, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Boulder Tech Connect" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content={ogImageUrl ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Structured data: helps search engines understand the organization -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Boulder Tech Connect",
+      "description": description,
+      "url": canonical.origin,
+      "foundingDate": "2024",
+      "location": {
+        "@type": "Place",
+        "name": "Rayback Collective",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "2775 Valmont Rd",
+          "addressLocality": "Boulder",
+          "addressRegion": "CO",
+          "addressCountry": "US"
+        }
+      }
+    })} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

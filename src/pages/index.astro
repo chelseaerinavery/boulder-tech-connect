@@ -1,0 +1,101 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+---
+
+<Layout>
+  <header class="site-header">
+    <h1 class="brand">Boulder Tech Connect</h1>
+    <p class="tagline">boulder's casual tech meetup</p>
+    <nav>
+      <ul>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#gallery">Photos</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#connect">Connect</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="events" class="events">
+      <div class="luma-embed">
+        <iframe
+          src="https://luma.com/embed/calendar/cal-uiQtr7zdMvN8Dr5/events"
+          width="600"
+          height="600"
+          frameborder="0"
+          allowfullscreen=""
+          aria-hidden="false"
+          tabindex="0"
+          title="Boulder Tech Connect events on Luma"></iframe>
+      </div>
+    </section>
+
+    <section id="gallery" class="gallery">
+      <h2>Share your photos!</h2>
+      <div class="grid">
+        <img
+          src="/gallery/meetup-1.jpg"
+          alt="Boulder Tech Connect attendees mingling at a past meetup"
+          loading="lazy"
+          width="800"
+          height="600"
+        />
+        <img
+          src="/gallery/meetup-2.jpg"
+          alt="The crowd at a recent Boulder Tech Connect gathering"
+          loading="lazy"
+          width="800"
+          height="600"
+        />
+      </div>
+    </section>
+
+    <section class="info card">
+      <div id="about" class="about">
+        <h2>About</h2>
+        <p>
+          Boulder Tech Connect brings together developers, designers, founders,
+          and anyone working in tech across Boulder. Whether you're new in town
+          or a longtime local, come grab a drink and meet your neighbors in
+          tech.
+        </p>
+        <p>
+          We've been gathering since 2024, and we typically meet on the
+          <strong>first Wednesday of every month</strong> at <a
+            href="https://maps.google.com/?q=Rayback+Collective+Boulder"
+            target="_blank"
+            rel="noopener">Rayback Collective</a
+          >, Boulder's food-truck beer garden on Valmont. No agenda, just grab a
+          name tag and say hi.
+        </p>
+      </div>
+
+      <hr class="divider" />
+
+      <div id="connect" class="connect">
+        <h2>Stay Connected</h2>
+        <p class="section-intro">
+          Follow us to get notified about each month's meetup.
+        </p>
+        <div class="links">
+          <a
+            href="https://luma.com/boulder-tech-connect"
+            target="_blank"
+            rel="noopener">Luma</a
+          >
+          <a
+            href="https://www.meetup.com/boulder-tech-connect/"
+            target="_blank"
+            rel="noopener">Meetup</a
+          >
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Boulder Tech Connect</p>
+  </footer>
+</Layout>
