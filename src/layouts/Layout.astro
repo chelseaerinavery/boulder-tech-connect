@@ -7,10 +7,14 @@ export interface Props {
 }
 
 const {
-  title = "Boulder Tech Connect — Boulder's monthly tech meetup",
-  description = "A casual monthly networking meetup for Boulder's tech community. Developers, designers, and founders gather the first Wednesday of every month at Rayback Collective.",
+  title = "Boulder Tech Connect — Boulder Tech Networking Meetup",
+  description = "Boulder's free monthly tech networking meetup. Developers, designers, founders, and folks hiring or job-hunting meet the first Wednesday each month at Rayback Collective — come network, hire, or find a tech job.",
   ogImage,
 } = Astro.props;
+
+// Keywords the page targets (low ranking weight, but harmless + used by some engines).
+const keywords =
+  "Boulder tech meetup, Boulder networking, tech networking, Boulder tech jobs, tech hiring, developer meetup, Boulder tech community, tech events Boulder, Front Range tech meetup, Colorado Front Range tech networking";
 
 // Canonical + absolute OG URL derived from `site` in astro.config.mjs
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -27,9 +31,16 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
     <!-- Primary SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
     <link rel="canonical" href={canonical} />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#c1bdf4" />
+
+    <!-- Local SEO (Boulder / Colorado Front Range) -->
+    <meta name="geo.region" content="US-CO" />
+    <meta name="geo.placename" content="Boulder, Colorado" />
+    <meta name="geo.position" content="40.029616;-105.259456" />
+    <meta name="ICBM" content="40.029616, -105.259456" />
 
     <!-- Open Graph (Facebook, LinkedIn, iMessage, etc.) -->
     <meta property="og:type" content="website" />
@@ -48,25 +59,72 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <!-- Structured data: helps search engines understand the organization -->
+    <!-- Structured data: helps search engines understand the org + the recurring meetup -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Boulder Tech Connect",
-      "description": description,
-      "url": canonical.origin,
-      "foundingDate": "2024",
-      "location": {
-        "@type": "Place",
-        "name": "Rayback Collective",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "2775 Valmont Rd",
-          "addressLocality": "Boulder",
-          "addressRegion": "CO",
-          "addressCountry": "US"
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": `${canonical.origin}/#org`,
+          "name": "Boulder Tech Connect",
+          "description": description,
+          "url": canonical.origin,
+          "foundingDate": "2024",
+          "keywords": keywords,
+          "areaServed": [
+            { "@type": "City", "name": "Boulder, Colorado" },
+            { "@type": "AdministrativeArea", "name": "Colorado Front Range" }
+          ],
+          "knowsAbout": [
+            "Technology networking",
+            "Software development",
+            "Startups",
+            "Tech jobs and hiring"
+          ],
+          "sameAs": [
+            "https://luma.com/boulder-tech-connect",
+            "https://www.meetup.com/boulder-tech-connect/"
+          ],
+          "location": {
+            "@type": "Place",
+            "name": "Rayback Collective",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2775 Valmont Rd",
+              "addressLocality": "Boulder",
+              "addressRegion": "CO",
+              "postalCode": "80304",
+              "addressCountry": "US"
+            }
+          }
+        },
+        {
+          "@type": "Event",
+          "name": "Boulder Tech Connect Monthly Meetup",
+          "description": "A casual monthly tech networking meetup on the Colorado Front Range. Developers, designers, founders, recruiters, and job seekers gather to network over drinks.",
+          "eventSchedule": {
+            "@type": "Schedule",
+            "byDay": "https://schema.org/Wednesday",
+            "repeatFrequency": "P1M",
+            "startTime": "18:00",
+            "endTime": "20:00"
+          },
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "organizer": { "@id": `${canonical.origin}/#org` },
+          "location": {
+            "@type": "Place",
+            "name": "Rayback Collective",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2775 Valmont Rd",
+              "addressLocality": "Boulder",
+              "addressRegion": "CO",
+              "postalCode": "80304",
+              "addressCountry": "US"
+            }
+          }
         }
-      }
+      ]
     })} />
   </head>
   <body>
