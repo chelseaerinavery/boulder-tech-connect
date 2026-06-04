@@ -23,7 +23,12 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
   <main>
     <section id="events" class="events">
       <h2>Upcoming Events</h2>
-      <ul class="event-list" id="event-list" aria-live="polite" aria-busy="true">
+      <ul
+        class="event-list"
+        id="event-list"
+        aria-live="polite"
+        aria-busy="true"
+      >
         <li class="events-status">Loading events…</li>
       </ul>
       <noscript>
@@ -161,7 +166,10 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
           }
         } catch (err) {
           list.replaceChildren(
-            statusMessage("Couldn’t load events right now.", "View them on Luma →"),
+            statusMessage(
+              "Couldn’t load events right now.",
+              "View them on Luma →",
+            ),
           );
         } finally {
           list.setAttribute("aria-busy", "false");
@@ -212,13 +220,12 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
           Boulder Tech Connect is a casual tech networking meetup that brings
           together developers, designers, founders, recruiters, and anyone
           working in tech across Boulder and the Colorado Front Range. Whether
-          you're new in town, job hunting, hiring, or a longtime local, come grab
-          a drink and meet your neighbors in tech.
+          you're new in town, job hunting, hiring, or a longtime local, come
+          grab a drink and meet your neighbors in tech.
         </p>
         <p>
           It's a relaxed way to network, swap ideas, hear who's hiring, and find
-          your next tech job or teammate — no pitches, no pressure. We've been
-          gathering since 2024, and we typically meet on the
+          your next tech job or teammate. We typically meet on the
           <strong>first Wednesday of every month</strong> at <a
             href="https://maps.google.com/?q=Rayback+Collective+Boulder"
             target="_blank"
