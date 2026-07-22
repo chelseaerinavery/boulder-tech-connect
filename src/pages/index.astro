@@ -7,7 +7,7 @@ import "../styles/global.css";
 const CAL_URL = "https://luma.com/boulder-tech-connect";
 ---
 
-<Layout>
+<Layout ogImage="/og-image.jpg">
   <header class="site-header">
     <h1 class="brand">Boulder Tech Connect</h1>
     <p class="tagline">boulder's casual tech networking meetup</p>
@@ -61,6 +61,8 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
         end: string | null;
         location: string;
         url: string | null;
+        host: string | null;
+        hostUrl: string | null;
       };
 
       function renderCard(ev: ApiEvent): HTMLLIElement {
@@ -102,16 +104,47 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
         })}`;
         meta.append(time);
 
-        body.append(title, meta);
+        body.append(title);
+
+        if (ev.host) {
+          const host = document.createElement("p");
+          host.className = "event-host";
+          host.append(document.createTextNode("Hosted by "));
+          if (ev.hostUrl) {
+            const hostLink = document.createElement("a");
+            hostLink.href = ev.hostUrl;
+            hostLink.target = "_blank";
+            hostLink.rel = "noopener";
+            hostLink.textContent = ev.host;
+            host.append(hostLink);
+          } else {
+            host.append(document.createTextNode(ev.host));
+          }
+          body.append(host);
+        }
+
+        body.append(meta);
 
         if (ev.location) {
           const loc = document.createElement("p");
           loc.className = "event-location";
-          loc.textContent = ev.location;
+          // Just the place name — the full address is in the Luma event
+          loc.textContent = ev.location.split(",")[0];
           body.append(loc);
         }
 
         li.append(date, body);
+
+        // Events run by other communities on our calendar get a spotlight sticker
+        if (ev.host && ev.host !== "Boulder Tech Connect") {
+          const sticker = document.createElement("img");
+          sticker.className = "event-spotlight";
+          sticker.src = "/community-spotlight.png";
+          sticker.alt = "Community spotlight";
+          sticker.width = 210;
+          sticker.height = 168;
+          li.append(sticker);
+        }
 
         // If the event happens today (Boulder time), flag the card and add the badge
         if (dayKey(start) === dayKey(new Date())) {
@@ -126,6 +159,51 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
         }
 
         return li;
+      }
+
+      // Inject Event structured data for the live events so search engines can
+      // show them as rich results. Google indexes JS-injected JSON-LD.
+      function injectEventSchema(events: ApiEvent[]) {
+        const schema = {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          itemListElement: events.map((ev, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: {
+              "@type": "Event",
+              name: ev.title,
+              startDate: ev.start,
+              ...(ev.end ? { endDate: ev.end } : {}),
+              eventAttendanceMode:
+                "https://schema.org/OfflineEventAttendanceMode",
+              eventStatus: "https://schema.org/EventScheduled",
+              ...(ev.location
+                ? {
+                    location: {
+                      "@type": "Place",
+                      name: ev.location.split(",")[0],
+                      address: ev.location,
+                    },
+                  }
+                : {}),
+              ...(ev.host
+                ? {
+                    organizer: {
+                      "@type": "Organization",
+                      name: ev.host,
+                      ...(ev.hostUrl ? { url: ev.hostUrl } : {}),
+                    },
+                  }
+                : {}),
+              ...(ev.url ? { url: ev.url } : {}),
+            },
+          })),
+        };
+        const script = document.createElement("script");
+        script.type = "application/ld+json";
+        script.textContent = JSON.stringify(schema);
+        document.head.append(script);
       }
 
       function statusMessage(text: string, linkText: string): HTMLLIElement {
@@ -158,6 +236,7 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
             );
           } else {
             for (const ev of events) list.append(renderCard(ev));
+            injectEventSchema(events);
           }
         } catch (err) {
           list.replaceChildren(

@@ -219,6 +219,7 @@ h2 {
 }
 
 .event-card {
+  position: relative; /* anchor for stickers that overlap the card on mobile */
   display: flex;
   align-items: center;
   gap: 1.1rem;
@@ -235,13 +236,32 @@ h2 {
   box-shadow: 6px 6px 0 rgba(90, 79, 208, 0.3);
 }
 
-.event-today {
-  flex: 0 0 auto;
-  width: 96px;
+/* Stickers sit ON the card's top-right corner — mostly overlapping the card
+   so they read as stuck to it, not floating in the background */
+.event-today,
+.event-spotlight {
+  position: absolute;
+  top: -8px;
+  right: 4px;
   height: auto;
-  margin-left: auto;
-  align-self: center;
+}
+
+.event-today,
+.event-spotlight {
+  width: 180px;
   transform: rotate(-9deg);
+}
+
+/* The spotlight art has more transparent padding in its PNG and smaller
+   lettering, so it gets a larger box than the Today sticker */
+.event-spotlight {
+  width: 215px;
+}
+
+/* If a spotlighted event is also today, drop the spotlight to the bottom corner */
+.event-card:has(.event-today) .event-spotlight {
+  top: auto;
+  bottom: -20px;
 }
 
 .event-date {
@@ -298,6 +318,21 @@ h2 {
 .event-location {
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.event-host {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.event-host a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.event-host a:hover {
+  color: var(--accent);
 }
 
 .events-status {
@@ -383,5 +418,28 @@ footer {
 
   .gallery .grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Narrow screens: stickers sit on the bottom-right corner instead, where
+     they can't clip the event title */
+  .event-spotlight,
+  .event-today {
+    top: auto;
+    bottom: -24px;
+    right: -14px;
+  }
+
+  .event-spotlight {
+    width: 132px;
+  }
+
+  .event-today {
+    width: 100px;
+  }
+
+  /* If a card is both today and spotlighted, send Today back to the top corner */
+  .event-card:has(.event-spotlight) .event-today {
+    bottom: auto;
+    top: -24px;
   }
 }

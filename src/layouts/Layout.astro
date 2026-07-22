@@ -7,7 +7,7 @@ export interface Props {
 }
 
 const {
-  title = "Boulder Tech Connect",
+  title = "Boulder Tech Connect | Tech Networking Meetup in Boulder, CO",
   description = "Boulder, Colorado's casual tech networking meetup.",
   ogImage,
 } = Astro.props;
@@ -53,6 +53,14 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    {ogImageUrl && <meta property="og:image:width" content="1200" />}
+    {ogImageUrl && <meta property="og:image:height" content="630" />}
+    {ogImageUrl && (
+      <meta
+        property="og:image:alt"
+        content="A crowded Boulder tech event with a Boulder Tech Connect slide on the big screen"
+      />
+    )}
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content={ogImageUrl ? "summary_large_image" : "summary"} />
