@@ -12,7 +12,8 @@
     "packageJson": {
       "dependencies": [
         "npm:@astrojs/sitemap@^3.7.3",
-        "npm:astro@^6.4.3"
+        "npm:astro@^6.4.3",
+        "npm:netlify-cli@^26.1.0"
       ]
     }
   }

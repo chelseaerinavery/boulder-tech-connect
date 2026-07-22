@@ -110,7 +110,6 @@ body::before {
 }
 
 /* Buttons / pill links */
-.btn,
 .links a {
   display: inline-block;
   padding: 0.75rem 1.8rem;
@@ -125,7 +124,6 @@ body::before {
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-.btn:hover,
 .links a:hover {
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 rgba(20, 16, 25, 0.3);
@@ -162,7 +160,13 @@ h2 {
   margin-bottom: 1.5rem;
 }
 
-/* Combined info card (About + Connect) */
+/* Combined info card (About + Connect) — the card IS the section, so shrink
+   its max-width so its outer edges line up with the event cards and gallery
+   (960px section minus the 2rem padding other sections have on each side). */
+.info.card {
+  max-width: calc(960px - 4rem);
+}
+
 .info .divider {
   border: none;
   border-top: 2px dashed rgba(20, 16, 25, 0.2);
@@ -187,6 +191,7 @@ h2 {
 /* Events — front and center */
 .events {
   text-align: center;
+  padding-bottom: 1rem;
 }
 
 .events .section-intro {
@@ -202,16 +207,15 @@ h2 {
   gap: 1rem;
   margin-top: 1.25rem;
   text-align: left;
-  /* Reserve roughly three cards' worth of height so swapping the "Loading…"
-     placeholder for the fetched events doesn't shift the page (fixes CLS). */
-  min-height: 320px;
 }
 
-/* Center the loading/empty/error message within the reserved space */
+/* Center the loading/empty/error message and reserve roughly two cards' worth
+   of height so swapping the placeholder for events barely shifts the page */
 .event-list:has(.events-status) {
   justify-content: center;
   align-items: center;
   text-align: center;
+  min-height: 280px;
 }
 
 .event-card {
@@ -221,7 +225,7 @@ h2 {
   background: var(--card);
   border: 3px solid var(--border);
   border-radius: 16px;
-  padding: 1rem 1.25rem;
+  padding: 1.75rem 1.25rem;
   box-shadow: var(--shadow);
 }
 
@@ -306,10 +310,6 @@ h2 {
   font-weight: 600;
 }
 
-.events-cta {
-  margin-top: 1.5rem;
-}
-
 /* Connect */
 .links {
   display: flex;
@@ -318,7 +318,11 @@ h2 {
   flex-wrap: wrap;
 }
 
-/* Gallery */
+/* Gallery — pulled up close under the events list */
+.gallery {
+  padding-top: 1rem;
+}
+
 .gallery .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
