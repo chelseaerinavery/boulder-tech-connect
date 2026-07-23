@@ -32,6 +32,11 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
     <link rel="preload" as="image" href="/bg-mobile.png" media="(max-width: 767px)" />
     <link rel="preload" as="image" href="/bg-desktop.png" media="(min-width: 768px)" />
 
+    <!-- Event-card stickers render only after the events API responds; preload
+         them so they appear instantly instead of popping in late (tiny files) -->
+    <link rel="preload" as="image" href="/community-spotlight.webp" />
+    <link rel="preload" as="image" href="/today.webp" />
+
     <!-- Primary SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
