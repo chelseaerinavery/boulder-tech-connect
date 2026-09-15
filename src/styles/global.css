@@ -77,11 +77,6 @@ body::before {
   color: var(--muted);
 }
 
-/* Reserves the tagline's space on subpages without showing it */
-.tagline-hidden {
-  visibility: hidden;
-}
-
 .site-header nav {
   margin-top: 1.5rem;
 }
