@@ -462,12 +462,32 @@ footer {
   max-width: calc(960px - 4rem);
 }
 
+/* Sponsor/thanks copy scales with the viewport and runs wider than the
+   homepage blurb so it fills the card on desktop instead of hugging the left */
+.sponsor h2,
+.inquire h2,
+.thanks h2 {
+  font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.4rem);
+}
+
+.sponsor .section-intro,
+.inquire .section-intro,
+.thanks .section-intro,
+.sponsor-block p,
+.sponsor-list {
+  font-size: clamp(1rem, 0.85rem + 0.5vw, 1.25rem);
+  max-width: 72ch;
+}
+
+.sponsor-block h3 {
+  font-size: clamp(1.15rem, 0.95rem + 0.7vw, 1.5rem);
+}
+
 .sponsor-block + .sponsor-block {
   margin-top: 1.75rem;
 }
 
 .sponsor-block h3 {
-  font-size: 1.15rem;
   font-weight: 800;
   margin-bottom: 0.4rem;
 }
