@@ -5,3 +5,13 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# Site artwork is static and unhashed, so tell browsers to keep it for a week
+# instead of revalidating on every page load (revalidation delays the paint of
+# the smiley backdrop by a network round-trip on each reload). If you replace
+# one of these files, rename it (e.g. bg-desktop-v2.webp) so visitors get the
+# new version right away.
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

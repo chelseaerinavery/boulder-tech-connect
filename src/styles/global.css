@@ -33,7 +33,7 @@ body::before {
   inset: 0;
   z-index: -1;
   background-color: var(--lav);
-  background-image: url("/bg-mobile.png");
+  background-image: url("/bg-mobile.webp");
   background-repeat: no-repeat;
   background-position: center center;
   /* Mobile: portrait artwork (smileys frame the corners) */
@@ -43,15 +43,16 @@ body::before {
 /* Desktop: landscape artwork fills the widescreen */
 @media (min-width: 768px) {
   body::before {
-    background-image: url("/bg-desktop.png");
+    background-image: url("/bg-desktop.webp");
     background-size: cover;
   }
 }
 
-/* Prominent header */
+/* Prominent header — same outer width as the cards below it (960px section
+   minus the 2rem side padding), so its edges line up with the body content */
 .site-header {
   text-align: center;
-  max-width: 760px;
+  max-width: calc(960px - 4rem);
   margin: 1.5rem auto 0;
   padding: 2.25rem 1.75rem;
   background: rgba(255, 255, 255, 0.62);
@@ -74,6 +75,11 @@ body::before {
   font-size: clamp(0.95rem, 2.5vw, 1.2rem);
   font-weight: 600;
   color: var(--muted);
+}
+
+/* Reserves the tagline's space on subpages without showing it */
+.tagline-hidden {
+  visibility: hidden;
 }
 
 .site-header nav {
@@ -102,9 +108,13 @@ body::before {
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-.site-header nav a:hover {
+.site-header nav a:hover,
+.site-header nav a[aria-current="page"] {
   background: var(--border);
   color: #fff;
+}
+
+.site-header nav a:hover {
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0 rgba(20, 16, 25, 0.22);
 }
@@ -441,5 +451,152 @@ footer {
   .event-card:has(.event-spotlight) .event-today {
     bottom: auto;
     top: -24px;
+  }
+}
+
+/* Brand as a link on subpages (sponsor, thanks) */
+.brand-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Sponsor page — both sections are cards, so match the info card's width */
+.sponsor.card,
+.inquire.card,
+.thanks.card {
+  max-width: calc(960px - 4rem);
+}
+
+.sponsor-block + .sponsor-block {
+  margin-top: 1.75rem;
+}
+
+.sponsor-block h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+}
+
+.sponsor-block p {
+  color: var(--muted);
+}
+
+.sponsor-list {
+  list-style: disc;
+  padding-left: 1.4rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: var(--muted);
+}
+
+.sponsor-list strong {
+  color: var(--ink);
+}
+
+.sponsor-note {
+  margin-top: 0.85rem;
+  font-size: 0.95rem;
+}
+
+/* Inquiry form */
+.sponsor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-width: 560px;
+}
+
+.hidden-field {
+  display: none;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: none;
+}
+
+.form-row label,
+.form-row legend {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.form-row legend {
+  margin-bottom: 0.35rem;
+}
+
+.form-row input[type="text"],
+.form-row input[type="email"],
+.form-row textarea {
+  font: inherit;
+  color: var(--ink);
+  padding: 0.6rem 0.85rem;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 rgba(20, 16, 25, 0.12);
+}
+
+.form-row input:focus-visible,
+.form-row textarea:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.form-row textarea {
+  resize: vertical;
+}
+
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.checks label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.checks input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--accent);
+}
+
+/* Submit button shares the pill style of .links a */
+.links button {
+  font: inherit;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.75rem 1.8rem;
+  background: var(--border);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0 rgba(20, 16, 25, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.links button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(20, 16, 25, 0.3);
+}
+
+@media (max-width: 600px) {
+  .sponsor.card,
+  .inquire.card,
+  .thanks.card {
+    margin-left: var(--gutter);
+    margin-right: var(--gutter);
   }
 }

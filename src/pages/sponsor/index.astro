@@ -1,0 +1,137 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import "../../styles/global.css";
+---
+
+<Layout
+  title="Sponsor Boulder Tech Connect | Reach Boulder's Tech Community"
+  description="Sponsor Boulder Tech Connect's monthly tech networking meetup and put your company in front of developers, designers, founders, and recruiters across the Colorado Front Range."
+  ogImage="/og-image.jpg"
+  preloadStickers={false}
+>
+  <header class="site-header">
+    <a class="brand-link" href="/"><h1 class="brand">Boulder Tech Connect</h1></a>
+    <!-- Same tagline as the homepage, kept in the layout but invisible so the
+         header is the exact same height when navigating between pages (no CLS) -->
+    <p class="tagline tagline-hidden" aria-hidden="true">boulder's casual tech networking meetup</p>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/sponsor/" aria-current="page">Sponsorship</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="why" class="sponsor card">
+      <h2>Sponsorship Opportunities</h2>
+      <p class="section-intro">
+        Thank you for being interested in sponsoring our meetup. Sponsors can
+        cover the first round of drinks, the drink tab for the night, and more.
+        Tell us your budget and we'll share options and pricing that fit.
+      </p>
+
+      <div class="sponsor-block">
+        <h3>What you get</h3>
+        <p>We promote your sponsorship in the following ways:</p>
+        <ul class="sponsor-list">
+          <li>
+            <strong>Event announcement</strong> to our 1,000+ Meetup members.
+          </li>
+          <li>
+            <strong>Your logo on the Meetup event page</strong> (please
+            provide).
+          </li>
+          <li>
+            <strong>Welcome table takeover</strong> during the event. We'll
+            display your branded materials, swag, and signage at our
+            welcome/check-in table, where every attendee checks in. Feel free
+            to bring team members to greet attendees, introduce your company,
+            and network throughout the event.
+          </li>
+        </ul>
+      </div>
+
+      <div class="sponsor-block">
+        <h3>About Boulder Tech Connect</h3>
+        <ul class="sponsor-list">
+          <li>1,000+ members on Meetup.com</li>
+          <li>Average attendance of 30–40 people and growing</li>
+          <li>A vibrant Boulder-area tech community</li>
+        </ul>
+      </div>
+
+      <div class="sponsor-block sponsor-fineprint">
+        <h3>Please note</h3>
+        <ul class="sponsor-list">
+          <li>We do not allow speakers or sponsorship speeches at any of our events.</li>
+          <li>We do not maintain or distribute any kind of list with attendee contact info.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="inquire" class="inquire card">
+      <h2>Get in Touch</h2>
+      <p class="section-intro">
+        Tell us a bit about you and we'll follow up with details and
+        pricing.
+      </p>
+
+      <!-- Netlify Forms: detected at build time via data-netlify. The hidden
+           form-name input and honeypot field are required for it to work. -->
+      <form
+        name="sponsor-inquiry"
+        method="POST"
+        action="/sponsor/thanks/"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        class="sponsor-form"
+      >
+        <input type="hidden" name="form-name" value="sponsor-inquiry" />
+        <p class="hidden-field">
+          <label>Don't fill this out: <input name="bot-field" /></label>
+        </p>
+
+        <div class="form-row">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required />
+        </div>
+
+        <div class="form-row">
+          <label for="company">Company</label>
+          <input id="company" name="company" type="text" autocomplete="organization" required />
+        </div>
+
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+
+        <fieldset class="form-row">
+          <legend>I'm interested in</legend>
+          <div class="checks">
+            <label><input type="checkbox" name="interest" value="Drinks" /> Sponsoring drinks</label>
+            <label><input type="checkbox" name="interest" value="Food" /> Sponsoring food</label>
+            <label><input type="checkbox" name="interest" value="Season" /> Sponsoring the season</label>
+            <label><input type="checkbox" name="interest" value="Hiring" /> Hiring / recruiting</label>
+            <label><input type="checkbox" name="interest" value="Other" /> Something else</label>
+          </div>
+        </fieldset>
+
+        <div class="form-row">
+          <label for="message">Anything else?</label>
+          <textarea id="message" name="message" rows="4"></textarea>
+        </div>
+
+        <div class="links">
+          <button type="submit">Send inquiry</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Boulder Tech Connect</p>
+  </footer>
+</Layout>

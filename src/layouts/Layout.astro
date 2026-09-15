@@ -4,12 +4,18 @@ export interface Props {
   description?: string;
   /** Path to a social share image in /public, e.g. "/og-image.png" (1200x630). */
   ogImage?: string;
+  /** Preload the event-card stickers (only the homepage renders them). */
+  preloadStickers?: boolean;
+  /** Keep the page out of search results (e.g. form thank-you pages). */
+  noindex?: boolean;
 }
 
 const {
   title = "Boulder Tech Connect | Tech Networking Meetup in Boulder, CO",
   description = "Boulder, Colorado's casual tech networking meetup.",
   ogImage,
+  preloadStickers = true,
+  noindex = false,
 } = Astro.props;
 
 // Keywords the page targets (low ranking weight, but harmless + used by some engines).
@@ -29,20 +35,20 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
     <meta name="generator" content={Astro.generator} />
 
     <!-- Preload the full-screen background (the LCP element) so it paints sooner -->
-    <link rel="preload" as="image" href="/bg-mobile.png" media="(max-width: 767px)" />
-    <link rel="preload" as="image" href="/bg-desktop.png" media="(min-width: 768px)" />
+    <link rel="preload" as="image" href="/bg-mobile.webp" media="(max-width: 767px)" />
+    <link rel="preload" as="image" href="/bg-desktop.webp" media="(min-width: 768px)" />
 
     <!-- Event-card stickers render only after the events API responds; preload
          them so they appear instantly instead of popping in late (tiny files) -->
-    <link rel="preload" as="image" href="/community-spotlight.webp" />
-    <link rel="preload" as="image" href="/today.webp" />
+    {preloadStickers && <link rel="preload" as="image" href="/community-spotlight.webp" />}
+    {preloadStickers && <link rel="preload" as="image" href="/today.webp" />}
 
     <!-- Primary SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <link rel="canonical" href={canonical} />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
     <meta name="theme-color" content="#c1bdf4" />
 
     <!-- Local SEO (Boulder / Colorado Front Range) -->

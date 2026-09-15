@@ -1,0 +1,42 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import "../../styles/global.css";
+---
+
+<Layout
+  title="Thanks! | Boulder Tech Connect"
+  description="Thanks for your interest in sponsoring Boulder Tech Connect. We'll be in touch soon."
+  ogImage="/og-image.jpg"
+  preloadStickers={false}
+  noindex
+>
+  <header class="site-header">
+    <a class="brand-link" href="/"><h1 class="brand">Boulder Tech Connect</h1></a>
+    <p class="tagline">thanks for reaching out!</p>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/sponsor/" aria-current="page">Sponsorship</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="thanks card">
+      <h2>We got your message</h2>
+      <p class="section-intro">
+        Thanks for your interest in sponsoring Boulder Tech Connect. We'll
+        follow up by email soon with details and pricing. In the meantime, come
+        say hi at the next meetup.
+      </p>
+      <div class="links">
+        <a href="/">Back to home</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Boulder Tech Connect</p>
+  </footer>
+</Layout>
