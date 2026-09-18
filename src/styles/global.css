@@ -441,12 +441,6 @@ footer {
   .event-today {
     width: 100px;
   }
-
-  /* If a card is both today and spotlighted, send Today back to the top corner */
-  .event-card:has(.event-spotlight) .event-today {
-    bottom: auto;
-    top: -24px;
-  }
 }
 
 /* Brand as a link on subpages (sponsor, thanks) */

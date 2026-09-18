@@ -135,8 +135,11 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
 
         li.append(date, body);
 
-        // Events run by other communities on our calendar get a spotlight sticker
-        if (ev.host && ev.host !== "Boulder Tech Connect") {
+        // One sticker per card, at most. Community events only ever get the
+        // spotlight sticker (never "Today") so it's clear we aren't the host.
+        const isCommunity = !!ev.host && ev.host !== "Boulder Tech Connect";
+
+        if (isCommunity) {
           const sticker = document.createElement("img");
           sticker.className = "event-spotlight";
           sticker.src = "/community-spotlight.webp";
@@ -144,10 +147,8 @@ const CAL_URL = "https://luma.com/boulder-tech-connect";
           sticker.width = 210;
           sticker.height = 168;
           li.append(sticker);
-        }
-
-        // If the event happens today (Boulder time), flag the card and add the badge
-        if (dayKey(start) === dayKey(new Date())) {
+        } else if (dayKey(start) === dayKey(new Date())) {
+          // Our own event happening today (Boulder time): flag the card and add the badge
           li.classList.add("is-today");
           const badge = document.createElement("img");
           badge.className = "event-today";
